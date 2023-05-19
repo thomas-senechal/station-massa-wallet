@@ -10,6 +10,7 @@ import { handleApplyResult, handleCancel } from '../utils/utils';
 import { walletapp } from '../../wailsjs/go/models';
 import { EventsOnce } from '../../wailsjs/runtime/runtime';
 import { Button } from '@massalabs/react-ui-kit';
+import { DragDrop } from '@massalabs/react-ui-kit/src/components/DragDrop/DragDrop';
 
 const ImportFile = () => {
   const nav = useNavigate();
@@ -30,7 +31,7 @@ const ImportFile = () => {
       ? `Selected ${account.nickname}'s account`
       : 'Select an account file to import';
 
-  const importStr = () => (account ? 'Import' : 'Select a file');
+  const importStr = () => (account ? 'Import' : '');
 
   const handleApply = async () => {
     if (!account) {
@@ -53,16 +54,24 @@ const ImportFile = () => {
     }
   };
 
+  // TODO disable button state
+
   return (
     <div className="bg-primary flex flex-col justify-center items-center h-screen w-full">
       <div className="w-1/4  max-w-sm  min-w-fit">
         <div>
           <p className="mas-title text-neutral pb-4">{req.Msg}</p>
         </div>
-        <div>
+        {/* <div>
           <p className={account ? accountStyleSuccess : accountStyleNormal}>
             {baselineStr()}
           </p>
+        </div> */}
+        <div className="pb-4">
+          <DragDrop
+            placeholder="Drag and Drop your .yaml file"
+            allowed={['yml', 'yaml']}
+          />
         </div>
         <div className="flex flex-row gap-4  pb-4">
           <div className="min-w-fit">
