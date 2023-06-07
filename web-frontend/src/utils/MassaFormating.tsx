@@ -40,7 +40,7 @@ export function formatStandard(
  * @returns The reversed and parsed number.
  */
 export function reverseFormatStandard(str: string): number {
-  const formattedString = str.replace(/[^0-9.-]/g, ''); // Remove non-numeric characters
+  const formattedString = str?.replace(/[^0-9.-]/g, ''); // Remove non-numeric characters
   return parseFloat(formattedString);
 }
 
@@ -63,7 +63,7 @@ export function checkRecipientFormat(recipient: string): boolean {
 
 export function maskAddress(str: string, length = 4, mask = '. . .'): string {
   const start = length;
-  const end = str.length - length;
+  const end = str?.length - length;
 
-  return str.substring(0, start) + mask + str.substring(end);
+  return str?.substring(0, start) + mask + str?.substring(end);
 }
