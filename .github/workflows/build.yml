@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [main]
+    branches: [main, fix-wallet-image-max]
 
   workflow_call:
     inputs:
@@ -60,7 +60,8 @@ jobs:
         with:
           os: ${{ matrix.os }}
       # The third step builds the binary and prepares an archive for publishing.
-      - name: Build binary and prepare archive for publish
+      - name: Build binary for ${{ matrix.target }} ${{ matrix.arch }}
+        if: matrix.target != 'darwin'
         shell: bash
         run: |
           export GOOS=${{ matrix.target }}
@@ -69,6 +70,16 @@ jobs:
           export CC=${{ matrix.cc }}
           export CGO_LDFLAGS="${{ matrix.cgo_ldflags }}"
           go build -tags desktop,production -ldflags "-w -s ${{ matrix.ldflags }}" -o $TARGET_NAME${{ matrix.ext }} main.go
+      - name: Build binary for MacOS ${{ matrix.arch }}
+        if: matrix.target == 'darwin'
+        shell: bash
+        run: |
+          export GOOS=${{ matrix.target }}
+          export GOARCH=${{ matrix.arch }}
+          export CGO_ENABLED=1
+          export CGO_LDFLAGS="${{ matrix.cgo_ldflags }}"
+          go install github.com/wailsapp/wails/v2/cmd/wails@v2.5.1
+          wails build -o $TARGET_NAME${{ matrix.ext }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
