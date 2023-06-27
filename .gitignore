@@ -9,4 +9,3 @@ build/*
 node_modules
 
 internal/handler/wallet/*.yaml
-internal/handler/html/dist
