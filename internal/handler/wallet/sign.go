@@ -102,6 +102,13 @@ func handleWithCorrelationId(wlt *wallet.Wallet, params operations.SignParams, g
 
 	value, err := gc.Get(key)
 	if err != nil {
+		if err == gcache.KeyNotFoundError {
+			return nil, operations.NewSignNotFound().WithPayload(
+				&models.Error{
+					Code:    errorSignCorrelationIdNotFound,
+					Message: fmt.Sprintf("Error given correlation id not in cache: %v", err.Error()),
+				})
+		}
 		return nil, operations.NewSignInternalServerError().WithPayload(
 			&models.Error{
 				Code:    errorSignLoadCache,
