@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	// "github.com/bluele/gcache"
 	"github.com/massalabs/station-massa-wallet/api/server/models"
 	"github.com/massalabs/station-massa-wallet/api/server/restapi/operations"
 	walletapp "github.com/massalabs/station-massa-wallet/pkg/app"
@@ -15,6 +16,7 @@ import (
 	"github.com/massalabs/station-massa-wallet/pkg/wallet"
 	"github.com/stretchr/testify/assert"
 )
+
 
 func signTransaction(t *testing.T, api *operations.MassaWalletAPI, nickname string, body string) *httptest.ResponseRecorder {
 	handler, exist := api.HandlerFor("post", "/api/accounts/{nickname}/sign")
@@ -34,6 +36,7 @@ func Test_walletSign_Handle(t *testing.T) {
 	password := "zePassword"
 	_, errGenerate := wallet.Generate(nickname, password)
 	assert.Nil(t, errGenerate)
+	
 
 	t.Run("invalid nickname", func(t *testing.T) {
 		resp := signTransaction(t, api, "Johnny", transactionData)
@@ -137,3 +140,26 @@ func Test_walletSign_Handle(t *testing.T) {
 	err = cleanupTestData([]string{nickname})
 	assert.NoError(t, err)
 }
+
+
+// func Test_handleWithCorrelationId(t *testing.T) {
+// 	mockCache := gcache.NewMockCache()
+
+// 	t.Run("correlation ID not found in cache", func(t *testing.T) {
+// 	params := operations.NewSignParams()
+// 	params.Body = &models.SignRequest{
+// 		CorrelationID: models.CorrelationID("test-correlation-id"),
+// 	}
+
+// 	mockCache.On("Get", CacheKey(params.Body.CorrelationID)).Return(nil, gcache.KeyNotFoundError)
+
+// 	correlationID, responder := handleWithCorrelationId(nil, params, mockCache)
+
+// 	assert.Nil(t, correlationID)
+// 	assert.NotNil(t, responder)
+// 	assert.IsType(t, &operations.SignNotFound{}, responder)
+// 	assert.Equal(t, "Error given correlation id not in cache: Key not found", responder.(*operations.SignNotFound).Payload.Message)
+
+// 	mockCache.AssertExpectations(t)
+// })
+
