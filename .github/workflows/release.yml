@@ -39,11 +39,11 @@ jobs:
           
           # Update the version field in the manifest.json file
           sed -i "s/\"version\": \".*\",/\"version\": \"$TAG_NAME\",/" manifest.json
-      - name: Commit changes
-        run: |
-          git add manifest.json
-          git commit -m "Update version in manifest.json" --no-verify
-          git push
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'Update version in manifest.json'
+          commit: --no-verify
+
 
   build-release:
     uses: ./.github/workflows/build.yml
