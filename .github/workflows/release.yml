@@ -41,7 +41,7 @@ jobs:
           sed -i "s/\"version\": \".*\",/\"version\": \"$TAG_NAME\",/" manifest.json
       - name: Commit changes
         run: |
-          git add ../../manifest.json
+          git add manifest.json
           git commit -m "Update version in manifest.json" --no-verify
           git push
 
