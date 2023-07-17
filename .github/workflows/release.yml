@@ -1,6 +1,9 @@
 name: Release workflow
 
 on:
+  push:
+    branches:
+      - 444-nathan
   workflow_dispatch:
     inputs:
       tag_name:
@@ -41,6 +44,7 @@ jobs:
           git add ../../manifest.json
           git commit -m "Update version in manifest.json" --no-verify
           git push
+
   build-release:
     uses: ./.github/workflows/build.yml
     with:
