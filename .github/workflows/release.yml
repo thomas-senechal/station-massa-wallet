@@ -47,6 +47,7 @@ jobs:
           committer_email: actions@github.com
 
   build-release:
+    needs: update-manifest
     uses: ./.github/workflows/build.yml
     with:
       tag_name: ${{ github.event.inputs.tag_name }}
