@@ -77,6 +77,15 @@ jobs:
             ${{ env.TARGET_NAME }}${{ matrix.ext }}
             wallet.svg
             manifest.json
+      - name: Check the manifest version
+        if: ${{ inputs.tag_name != '' }}
+        run: |
+          sudo apt-get install -y jq
+          version=$(jq -r '.key' manifest.json)
+          if [[ $version != ${{ inputs.tag_name }} ]]; then
+            echo "The manifest version is not equal to the tag version"
+            exit 1
+          fi
       - name: Zip binary
         if: ${{ inputs.tag_name != '' }}
         run: zip $TARGET_NAME.zip $TARGET_NAME${{ matrix.ext }} wallet.svg manifest.json
