@@ -81,7 +81,7 @@ jobs:
         if: ${{ inputs.tag_name != '' }}
         run: |
           sudo apt-get install -y jq
-          version=$(jq -r '.key' manifest.json)
+          version=$(jq -r '.version' manifest.json)
           if [[ $version != ${{ inputs.tag_name }} ]]; then
             echo "The manifest version is not equal to the tag version"
             exit 1
